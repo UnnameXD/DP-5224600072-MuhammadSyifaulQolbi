@@ -1,16 +1,17 @@
 #include <iostream>
-#include "./header/GameManager.h"
+#include "../header/GameManager.h"
+#include "../header/Hand.h"
 
 void GameManager::runSession() {
-    std::cout << "=== Run Started ===\n";
+    std::cout << "\n=== Run Started ===\n";
 
-    handGenerator.generateHand();
-    handPlayer.playHand();
+    Hand hand = handGenerator.generateHand(); // generate once
+    handPlayer.playHand(hand);                // pass same hand to player
 
-    int score = scoringRule.scoreHand();
+    int score = scoringRule.scoreHand(hand);  // score the same hand
     bool win = blindRule.checkBlind(score);
     int reward = rewardRule.earnMoney(win, score);
 
     std::cout << "Money gained: " << reward << "\n";
-    std::cout << "=== Run Ended ===\n";
+    std::cout << "=== Run Ended ===\n\n";
 }

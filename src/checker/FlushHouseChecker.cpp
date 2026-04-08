@@ -1,7 +1,11 @@
 #include <iostream>
 #include "../../header/checker/FlushHouseChecker.h"
 
-HandRank PairChecker::check(const Hand& hand) {
-    std::cout << "Detected Flush House\n";
-    return HandRank::FLUSH_HOUSE;
+HandRank FlushHouseChecker::check(const Hand& hand) {
+    if (hand.isFlushHouse) {
+        std::cout << "Detected Flush House\n";
+        return HandRank::FLUSH_HOUSE;
+    }
+    if (nextChecker) return nextChecker->check(hand);
+    return HandRank::HIGH_CARD;
 }

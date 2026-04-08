@@ -1,11 +1,11 @@
-#pragma once
 #include <iostream>
-#include "../../header/PokerHandChecker.h"
+#include "../../header/checker/HighCardChecker.h"
 
-class HighCardChecker : public PokerHandChecker {
-public:
-    HandRank check(const Hand& hand) override {
+HandRank HighCardChecker::check(const Hand& hand) {
+    if (hand.isHighCard) {
         std::cout << "Detected High Card\n";
         return HandRank::HIGH_CARD;
     }
-};
+    if (nextChecker) return nextChecker->check(hand);
+    return HandRank::HIGH_CARD;
+}

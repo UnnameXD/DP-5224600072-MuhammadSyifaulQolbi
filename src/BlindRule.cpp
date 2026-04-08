@@ -1,5 +1,5 @@
 #include <iostream>
-#include "./header/BlindRule.h"
+#include "../header/BlindRule.h"
 
 bool BlindRule::checkBlind(int score) {
     std::cout << "Checking blind requirement...\n";

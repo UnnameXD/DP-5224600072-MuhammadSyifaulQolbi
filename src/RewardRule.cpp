@@ -1,5 +1,5 @@
 #include <iostream>
-#include "./header/RewardRule.h"
+#include "../header/RewardRule.h"
 
 int RewardRule::earnMoney(bool win, int score) {
     std::cout << "Calculating reward...\n";

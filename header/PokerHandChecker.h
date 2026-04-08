@@ -2,18 +2,19 @@
 #include "Hand.h"
 
 enum class HandRank {
-    high_card,
-    pair,
-    two_pair,
-    three_of_a_kind,
-    straight,
-    flush,
-    full_house,
-    four_of_a_kind,
-    straight_flush,
-    royal_flush,
-    five_of_a_kind,
-    flush_house
+    HIGH_CARD,
+    PAIR,
+    TWO_PAIR,
+    THREE_OF_A_KIND,
+    STRAIGHT,
+    FLUSH,
+    FULL_HOUSE,
+    FOUR_OF_A_KIND,
+    STRAIGHT_FLUSH,
+    ROYAL_FLUSH,
+    FIVE_OF_A_KIND,
+    FLUSH_HOUSE,
+    FLUSH_FIVE
 };
 
 class PokerHandChecker {
