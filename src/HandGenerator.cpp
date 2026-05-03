@@ -1,28 +1,44 @@
 #include <iostream>
-#include <cstdlib>
+#include <algorithm>
+#include <random>
+#include <chrono>
 #include "../header/HandGenerator.h"
 #include "../header/Hand.h"
 
+HandGenerator::HandGenerator() {
+    initializeDeck();
+}
+
+void HandGenerator::initializeDeck() {
+    deck.clear();
+
+    char suits[] = {'H', 'D', 'C', 'S'};
+
+    for (char suit : suits) {
+        for (int rank = 2; rank <= 14; rank++) {
+            deck.push_back(Card(rank, suit));
+        }
+    }
+}
+
+void HandGenerator::shuffleDeck() {
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::shuffle(deck.begin(), deck.end(), std::default_random_engine(seed));
+}
+
+Card HandGenerator::drawCard() {
+    Card c = deck.back();
+    deck.pop_back();
+    return c;
+}
+
 Hand HandGenerator::generateHand() {
-    std::cout << "Generating cards...\n";
+    shuffleDeck();
 
     Hand hand;
-    int roll = rand() % 13; // 0-12, one per hand type
 
-    switch (roll) {
-        case 0:  hand.isHighCard      = true; break;
-        case 1:  hand.isPair          = true; break;
-        case 2:  hand.isTwoPair       = true; break;
-        case 3:  hand.isThreeOfAKind  = true; break;
-        case 4:  hand.isStraight      = true; break;
-        case 5:  hand.isFlush         = true; break;
-        case 6:  hand.isFullHouse     = true; break;
-        case 7:  hand.isFourOfAKind   = true; break;
-        case 8:  hand.isStraightFlush = true; break;
-        case 9:  hand.isRoyalFlush    = true; break;
-        case 10: hand.isFiveOfAKind   = true; break;
-        case 11: hand.isFlushHouse    = true; break;
-        case 12: hand.isFlushFive     = true; break;
+    for (int i = 0; i < 8; i++) { // Balatro hand size
+        hand.cards.push_back(drawCard());
     }
 
     return hand;

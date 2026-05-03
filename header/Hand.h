@@ -1,6 +1,10 @@
 #pragma once
+#include <vector>
+#include "Card.h"
 
 struct Hand {
+    std::vector<Card> cards;
+
     int value = 0;
 
     // Exactly one of these will be true, set by HandGenerator

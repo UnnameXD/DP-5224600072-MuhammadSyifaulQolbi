@@ -1,13 +1,18 @@
 #include <iostream>
 #include "../header/GameManager.h"
 #include "../header/Hand.h"
+#include "../header/HandGenerator.h"
 
 void GameManager::runSession() {
     std::cout << "\n=== Run Started ===\n";
 
     Hand hand = handGenerator.generateHand(); // generate once
     handPlayer.playHand(hand);                // pass same hand to player
-
+    
+    for (const auto& card : hand.cards) {
+        std::cout << card.toString() << " ";
+    }
+    
     int score = scoringRule.scoreHand(hand);  // score the same hand
     bool win = blindRule.checkBlind(score);
     int reward = rewardRule.earnMoney(win, score);
