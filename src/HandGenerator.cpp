@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
-#include <chrono>
 #include "../header/HandGenerator.h"
 #include "../header/Hand.h"
 
@@ -22,8 +21,8 @@ void HandGenerator::initializeDeck() {
 }
 
 void HandGenerator::shuffleDeck() {
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::shuffle(deck.begin(), deck.end(), std::default_random_engine(seed));
+    static std::mt19937 rng(std::random_device{}()); // seeded once
+    std::shuffle(deck.begin(), deck.end(), rng);
 }
 
 Card HandGenerator::drawCard() {

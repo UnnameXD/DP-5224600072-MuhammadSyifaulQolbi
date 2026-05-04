@@ -6,4 +6,4 @@ Kelas: GT 12 C
 
 NRP  : 5224600072
 
-Tugas: Chain of Responsibility
+Tugas: Refactor Game Loop - Hand Generator - Chose Hand
