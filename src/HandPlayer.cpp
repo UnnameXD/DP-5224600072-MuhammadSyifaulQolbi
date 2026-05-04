@@ -80,3 +80,7 @@ void HandPlayer::playHand(Hand& hand) {
     }
     std::cout << "\n";
 }
+
+Hand HandPlayer::getChosenHand() const {
+    return chosenHand;
+}

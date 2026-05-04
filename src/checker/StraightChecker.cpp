@@ -1,8 +1,10 @@
 #include <iostream>
 #include "../../header/checker/StraightChecker.h"
+#include "../../header/checker/HandUtils.h"
 
+// Straight: 5 cards with consecutive ranks (any suits)
 HandRank StraightChecker::check(const Hand& hand) {
-    if (hand.isStraight) {
+    if (isConsecutiveRanks(hand)) {
         std::cout << "Detected Straight\n";
         return HandRank::STRAIGHT;
     }
