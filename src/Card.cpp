@@ -12,5 +12,5 @@ std::string Card::toString() const {
     else if (rank == 14) rankStr = "A";
     else rankStr = std::to_string(rank);
 
-    return rankStr + suit;
+    return rankStr + "-" + suit;
 }
