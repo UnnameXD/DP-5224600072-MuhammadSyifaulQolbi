@@ -14,3 +14,4 @@ std::string Card::toString() const {
 
     return rankStr + "-" + suit;
 }
+

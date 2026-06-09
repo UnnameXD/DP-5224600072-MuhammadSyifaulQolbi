@@ -79,7 +79,7 @@ struct RunPersistentState {
 Instantiate Concrete Command (e.g., ShopJokerUpgradeCommand)
           │
           ▼
-Push to sessionState.persistent.pendingCommands list[cite: 4]
+Push to sessionState.persistent.pendingCommands list
           │
           ▼
 Trigger Global State Transition: Advance Ante / Load Shop
@@ -99,4 +99,41 @@ Commands use strict boundary rules to isolate processing logic:
 |`ShopJokerUpgrade`|`TriggerTiming::OnShopEnter`|Intercepts shop generation to force a specific holographic/foil modifier on an item.|
 |`MegaPackVoucher`|`TriggerTiming::OnPackOpen`|Mutates the generation parameters of a booster session to increase choices.|
 
-## 
+## Blind Target Score
+### 1. The Configuration Source:
+The current Ante number is an overarching progression metric that must survive across multiple blinds and shop visits. Therefore, it lives inside the persistent container:
+```cpp
+struct RunPersistentState {
+    int ante = 1; // Lives here because it tracks macro progression
+    // ... other persistent data
+};
+```
+
+### 2. The Active Constraint
+The actual target score for the current round is a highly mutable value that only matters during the active blind lifecycle. Once the blind is completed or skipped, that specific target is discarded. Therefore, the calculated target score integer lives inside the runtime container:
+``` cpp
+struct BlindRuntimeState {
+    int scoreTarget = 0; // Lives here because it resets every blind
+    int blindScore = 0;  // Tracked against the scoreTarget
+    // ... hands and discards
+};
+```
+
+### 3. The Initialization Handshake (Data Flow)
+The scoreTarget is calculated dynamically during the ENTER BLIND phase.
+An external rule engine or static lookup table reads the ante and the selected BlindType (Small, Big, or Boss) from the persistent state, applies the scaling math, and writes the result directly into the new runtime state:
+$$\text{scoreTarget} = \text{Base Scaling Formula}(\text{persistent.ante}) \times \text{BlindMultiplier}$$
+
+``` cpp
+// Occurs exactly at the "ENTER BLIND" lifecycle step
+void enterBlindLifecycle(RunSessionState& session, BlindType selectedBlind) {
+    // 1. Completely reset the runtime state to clear old artifacts
+    session.runtime = BlindRuntimeState(); 
+    
+    // 2. Fetch macro-progression to calculate local variables
+    int currentAnte = session.persistent.ante; 
+    
+    // 3. Assign the localized target score for this specific encounter
+    session.runtime.scoreTarget = ScoreBalanceRegistry::getTargetFor(currentAnte, selectedBlind);
+}
+```

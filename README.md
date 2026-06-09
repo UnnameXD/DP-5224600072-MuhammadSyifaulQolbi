@@ -20,7 +20,7 @@ The system utilizes a highly modular architecture. Every mechanic—from base ca
 - [Card and Hand Data Structures](/docs/Card%20and%20Hand%20Data%20Structures.md)
 - [Joker System](/docs/Joker%20System.md)
 - [Shop System](/docs/Shop%20System.md)
-- [Blind State System and Skip Reward Command System](/docs/Blind%20State%20System%20and%20Skip%20Reward%20Command%20System.md)
+- [Blind State System and Skip Reward Command System](/docs/Blind%20State%20System%20and%20Skip%20Reward%20Command%20System.md  )
 
 # Author
 - Name : Muhammad Syifaul Qolbi

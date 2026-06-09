@@ -1,8 +1,7 @@
 #include <iostream>
-#include "../header/ScoringRule.h"
+#include "ScoringRule.h"
 
 ScoringRule::ScoringRule() {
-    // Chain from strongest to weakest poker hand
     FlushFive.setNext(&FlushHouse);
     FlushHouse.setNext(&FiveOfAKind);
     FiveOfAKind.setNext(&RoyalFlush);
@@ -17,32 +16,42 @@ ScoringRule::ScoringRule() {
     Pair.setNext(&HighCard);
 }
 
-int ScoringRule::scoreHand(const Hand& hand) {
-    std::cout << "Calculating hand score...\n";
+ScoreContext ScoringRule::createContext(const Hand& hand) const {
+    HandRank rank  = const_cast<FlushFiveChecker&>(FlushFive).check(hand);
+    BaseScore base = getBaseScore(rank);
+    int cardChips  = calcCardChips(hand);
 
-    HandRank rank = FlushFive.check(hand);
-
-    int score = convertRankToScore(rank);
-
-    std::cout << "Final score = " << score << "\n";
-    return score;
+    ScoreContext ctx;
+    ctx.handRank  = rank;
+    ctx.baseChips = base.chips;
+    ctx.baseMult  = base.mult;
+    ctx.chips     = base.chips + cardChips;
+    ctx.mult      = base.mult;
+    return ctx;
 }
 
-int ScoringRule::convertRankToScore(HandRank rank) {
+ScoringRule::BaseScore ScoringRule::getBaseScore(HandRank rank) const {
     switch (rank) {
-        case HandRank::FLUSH_FIVE: return 100;
-        case HandRank::FLUSH_HOUSE: return 75;
-        case HandRank::FIVE_OF_A_KIND: return 50;
-        case HandRank::ROYAL_FLUSH: return 40;
-        case HandRank::STRAIGHT_FLUSH: return 30;
-        case HandRank::FOUR_OF_A_KIND: return 25;
-        case HandRank::FULL_HOUSE: return 20;
-        case HandRank::FLUSH: return 15;
-        case HandRank::STRAIGHT: return 10;
-        case HandRank::THREE_OF_A_KIND: return 7;
-        case HandRank::TWO_PAIR: return 5;
-        case HandRank::PAIR: return 2;
-        case HandRank::HIGH_CARD: return 1;
-        default: return 0;
+        case HandRank::FLUSH_FIVE:      return {160, 16};
+        case HandRank::FLUSH_HOUSE:     return {140, 14};
+        case HandRank::FIVE_OF_A_KIND:  return {120, 12};
+        case HandRank::ROYAL_FLUSH:     return {100,  8};
+        case HandRank::STRAIGHT_FLUSH:  return {100,  8};
+        case HandRank::FOUR_OF_A_KIND:  return { 60,  7};
+        case HandRank::FULL_HOUSE:      return { 40,  4};
+        case HandRank::FLUSH:           return { 35,  4};
+        case HandRank::STRAIGHT:        return { 30,  4};
+        case HandRank::THREE_OF_A_KIND: return { 30,  3};
+        case HandRank::TWO_PAIR:        return { 20,  2};
+        case HandRank::PAIR:            return { 10,  2};
+        case HandRank::HIGH_CARD:       return {  5,  1};
+        default:                        return {  5,  1};
     }
+}
+
+int ScoringRule::calcCardChips(const Hand& hand) const {
+    int total = 0;
+    for (const auto& c : hand.cards)
+        total += c.getChipValue();
+    return total;
 }

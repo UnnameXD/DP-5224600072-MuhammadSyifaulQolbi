@@ -1,7 +1,7 @@
 #pragma once
 #include "Hand.h"
 #include "PokerHandChecker.h"
-
+#include "ScoreContext.h"
 #include "./checker/HighCardChecker.h"
 #include "./checker/PairChecker.h"
 #include "./checker/TwoPairChecker.h"
@@ -19,23 +19,24 @@
 class ScoringRule {
 public:
     ScoringRule();
-    int scoreHand(const Hand& hand);
+    ScoreContext createContext(const Hand& hand) const;
 
 private:
-    // root chain
-    FlushFiveChecker FlushFive;
-    FlushHouseChecker FlushHouse;
-    FiveOfAKindChecker FiveOfAKind;
-    RoyalFlushChecker RoyalFlush;
+    FlushFiveChecker     FlushFive;
+    FlushHouseChecker    FlushHouse;
+    FiveOfAKindChecker   FiveOfAKind;
+    RoyalFlushChecker    RoyalFlush;
     StraightFlushChecker StraightFlush;
-    FourOfAKindChecker FourOfAKind;
-    FullHouseChecker FullHouse;
-    FlushChecker Flush;
-    StraightChecker Straight;
-    ThreeOfAKindChecker ThreeOfAKind;
-    TwoPairChecker TwoPair;
-    PairChecker Pair;
-    HighCardChecker HighCard;
+    FourOfAKindChecker   FourOfAKind;
+    FullHouseChecker     FullHouse;
+    FlushChecker         Flush;
+    StraightChecker      Straight;
+    ThreeOfAKindChecker  ThreeOfAKind;
+    TwoPairChecker       TwoPair;
+    PairChecker          Pair;
+    HighCardChecker      HighCard;
 
-    int convertRankToScore(HandRank rank);
+    struct BaseScore { int chips; int mult; };
+    BaseScore getBaseScore(HandRank rank) const;
+    int calcCardChips(const Hand& hand) const;
 };
