@@ -1,9 +1,7 @@
-#include <cstdlib>
-#include <ctime>
-#include "../header/GameManager.h"
+#include "GameManager.h"
 
 int main() {
-    GameManager gameManager;
-    gameManager.runSession();
+    GameManager game;
+    game.runSession();
     return 0;
 }

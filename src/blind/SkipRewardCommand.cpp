@@ -108,34 +108,10 @@ void BuffoonTag::execute(RunSessionState& session) {
 // -------------------------------------------------------
 // Negative Tag: open a pack, chosen joker receives Negative edition (+1 joker slot)
 void NegativeTag::execute(RunSessionState& session) {
-    int idxA = std::rand() % 12;
-    int idxB; do { idxB = std::rand() % 12; } while (idxB == idxA);
-
-    auto jA = makeJokerByIndex(idxA);
-    auto jB = makeJokerByIndex(idxB);
-    jA->edition = JokerEdition::NEGATIVE;
-    jB->edition = JokerEdition::NEGATIVE;
-
-    std::cout << "\n[Negative Tag] Choose a Joker — it receives Negative edition (+1 Joker slot):\n";
-    std::cout << "  [0] " << jA->getDisplayName() << " -- " << jA->getDescription()
-              << jA->getEditionDescription() << "\n";
-    std::cout << "  [1] " << jB->getDisplayName() << " -- " << jB->getDescription()
-              << jB->getEditionDescription() << "\n";
-    std::cout << "  [-1] Skip\n";
-
-    int pick = -99;
-    while (pick != 0 && pick != 1 && pick != -1) {
-        std::cout << "Choice (0, 1, or -1 to skip): ";
-        std::string line;
-        std::getline(std::cin >> std::ws, line);
-        try { pick = std::stoi(line); }
-        catch (...) { pick = -99; }
-        if (pick != 0 && pick != 1 && pick != -1)
-            std::cout << "Invalid. Enter 0, 1, or -1.\n";
-    }
-    if (pick == 0) session.persistent.jokerManager.addJoker(std::move(jA));
-    else if (pick == 1) session.persistent.jokerManager.addJoker(std::move(jB));
-    else std::cout << "Pack skipped.\n";
+    session.freeNextJoker        = true;
+    session.freeNextJokerEdition = JokerEdition::NEGATIVE;
+    session.freeNextJokerRare    = false;
+    std::cout << "[Negative Tag] Next Joker in shop is FREE with Negative edition (+1 Joker slot)!\n";
 }
 
 // -------------------------------------------------------

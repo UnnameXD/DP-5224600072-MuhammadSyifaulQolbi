@@ -69,9 +69,9 @@ class NegativeTag : public SkipRewardCommand {
 public:
     void execute(RunSessionState& session) override;
     bool shouldTriggerOn(TriggerTiming t) const override {
-        return t == TriggerTiming::Immediate;
+        return t == TriggerTiming::OnShopEnter;
     }
-    std::string describe() const override { return "Free Joker with Negative edition (+1 Joker slot)"; }
+    std::string describe() const override { return "Next Joker in shop is FREE with Negative (+1 Joker slot)"; }
     std::string tagName()   const override { return "Negative Tag"; }
 };
 
